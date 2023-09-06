@@ -1,0 +1,69 @@
+openapi: 3.0.2
+info:
+  title: API
+  description: "Rest API using Swagger Editor and Springboot."
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: agchitre@amazon.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1-SNAPSHOT
+externalDocs:
+  description: Rest API to access city details
+  url: https://domain.io/about/
+servers:
+- url: http://localhost:8080/v2
+tags:
+- name: city
+  description: Operations about the city
+paths:
+  /city/{citycode}:
+    get:
+      tags:
+      - city
+      summary: Get city by code
+      operationId: getCityByCode
+      parameters:
+      - name: citycode
+        in: path
+        description: 'Goverment defined code of the city.'
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/City'
+        404:
+          description: City not found
+          content: {}
+components:
+  schemas:
+    City:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        citycode:
+          type: string
+        cityName:
+          type: string
+        state:
+          type: string
+  securitySchemes:
+    reflectoring_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://domain.swagger.io/oauth/
+          scopes:
+            read:cities: read cities
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
